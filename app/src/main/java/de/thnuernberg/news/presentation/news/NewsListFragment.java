@@ -25,7 +25,6 @@ public class NewsListFragment extends ListFragment implements NewsListView {
     @Inject
     NewsListPresenter presenter;
 
-    private List<NewsEntry> newsEntries = new ArrayList<NewsEntry>();
     private NewsEntryAdapter adapter;
 
     @Override
@@ -57,7 +56,6 @@ public class NewsListFragment extends ListFragment implements NewsListView {
 
     @Override
     public void showNewsEntries(final List<NewsEntry> newsEntries) {
-        this.newsEntries = newsEntries;
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
