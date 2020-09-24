@@ -20,6 +20,6 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
-
+    <!-- TODO: Logcat shows that we didnt declare a permission here -->
   </application>
 </manifest>

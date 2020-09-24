@@ -15,6 +15,7 @@
       android:textSize="18sp"
       android:textStyle="bold"/>
 
+  <!-- TODO: green is not a good text colour -->
   <TextView
       android:id="@+id/newsDescription"
       android:layout_width="fill_parent"

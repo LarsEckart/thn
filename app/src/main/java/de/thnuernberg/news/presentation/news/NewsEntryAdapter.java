@@ -57,14 +57,16 @@ public class NewsEntryAdapter extends ArrayAdapter<NewsEntry> {
 
         NewsEntry newsEntry = newsEntries.get(position);
 
+        // TODO: bug, why do we show the long description like its the title?
+        // TODO: we have to show title, description and date, see res/layout/row.xml
         holder.newsTitle.setText(newsEntry.getDescription());
-        // TODO
 
         LinearLayout ll = row.findViewById(R.id.newsLinearLayout);
 
         if (position % 2 == 0) {
             ll.setBackgroundResource(R.color.white);
         } else {
+            // TODO: let's alternate 2 different background colours. Maybe something grey?
             ll.setBackgroundResource(R.color.white);
         }
         return row;
