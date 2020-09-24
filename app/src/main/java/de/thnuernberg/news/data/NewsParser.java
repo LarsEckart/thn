@@ -5,14 +5,20 @@ import android.sax.EndElementListener;
 import android.sax.EndTextElementListener;
 import android.sax.RootElement;
 import android.util.Xml;
+
 import de.thnuernberg.news.data.source.remote.RemoteDataSourceResponseConverter;
+
 import org.xml.sax.SAXException;
+
 import timber.log.Timber;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class NewsParser implements RemoteDataSourceResponseConverter {
@@ -29,7 +35,7 @@ public class NewsParser implements RemoteDataSourceResponseConverter {
     @Override
     public List<NewsEntry> convert(InputStream in) {
 
-        final List<NewsEntry> newsEntries = new ArrayList<NewsEntry>();
+        final List<NewsEntry> newsEntries = new ArrayList<>();
         final NewsEntry currentNewsEntry = new NewsEntry();
 
         // parser definition
@@ -49,7 +55,15 @@ public class NewsParser implements RemoteDataSourceResponseConverter {
         });
         item.getChild(PUB_DATE).setEndTextElementListener(new EndTextElementListener() {
             public void end(String body) {
-                currentNewsEntry.setPubDate(body);
+                SimpleDateFormat incFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+                SimpleDateFormat outFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                try {
+                    Date date = incFormat.parse(body);
+                    currentNewsEntry.setPubDate(outFormat.format(date));
+                } catch (ParseException e) {
+                    Timber.e(e);
+                }
+
             }
         });
         item.getChild(DESCRIPTION).setEndTextElementListener(new EndTextElementListener() {
@@ -66,11 +80,8 @@ public class NewsParser implements RemoteDataSourceResponseConverter {
         try {
             Xml.parse(in, Xml.Encoding.UTF_8, root.getContentHandler());
             return newsEntries;
-        } catch (IOException e) {
-            Timber.e(e.getMessage());
-            return Collections.emptyList();
-        } catch (SAXException e) {
-            Timber.e(e.getMessage());
+        } catch (IOException | SAXException e) {
+            Timber.e(e);
             return Collections.emptyList();
         }
     }
